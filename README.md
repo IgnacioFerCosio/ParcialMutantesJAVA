@@ -10,11 +10,6 @@ Este proyecto, **Magneto**, es una aplicación desarrollada en **Spring Boot** q
 - [Endpoints](#endpoints)
   - [POST /mutant](#post-mutant)
   - [GET /stats](#get-stats)
-- [Ejecución de Tests](#ejecución-de-tests)
-- [Contribuciones](#contribuciones)
-- [Licencia](#licencia)
-
----
 
 ## Requisitos
 
@@ -66,9 +61,10 @@ Este proyecto, **Magneto**, es una aplicación desarrollada en **Spring Boot** q
 - `403 FORBIDDEN` si el ADN es humano.
 
 ### GET /stats
-**Descripción:** Devuelve estadísticas de las verificaciones de ADN.
-**URL:** `/stats`
+**Descripción:** Devuelve estadísticas de las verificaciones de ADN. 
+**URL:** `/stats`  
 **Método:** `GET`
+
 **Response:**
 ```json
 {
@@ -77,3 +73,4 @@ Este proyecto, **Magneto**, es una aplicación desarrollada en **Spring Boot** q
   "ratio": 0.4
 }
 ```
+
