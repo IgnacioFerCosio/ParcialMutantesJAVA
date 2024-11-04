@@ -1,90 +1,79 @@
-# Parcial Magneto
+# Proyecto Magneto - Detección de Mutantes
 
-## Introduccion
-Magneto quiere reclutar la mayor cantidad de mutantes para poder luchar contra los X-Mens.
+Este proyecto, **Magneto**, es una aplicación desarrollada en **Spring Boot** que determina si una secuencia de ADN pertenece a un mutante (cuando en la matriz del ADN se repiten más de una secuencia de 4 letras iguales seguidas, ya se en vertical, horizontal o diagonal). Utiliza una **base de datos H2** embebida y está desplegado en **Render**.
 
-Te ha contratado a ti para que desarrolles un proyecto que detecte si un humano es mutante basándose en su secuencia de ADN.
+## Tabla de Contenidos
+- [Requisitos](#requisitos)
+- [Tecnologías](#tecnologías)
+- [Estructura del Proyecto](#estructura-del-proyecto)
+- [Instalación](#instalación)
+- [Endpoints](#endpoints)
+  - [POST /mutant](#post-mutant)
+  - [GET /stats](#get-stats)
+- [Ejecución de Tests](#ejecución-de-tests)
+- [Contribuciones](#contribuciones)
+- [Licencia](#licencia)
 
-Para eso te ha pedido crear un programa con un método o función con la siguiente firma:
+---
 
-**isMutant(String[] dna)**
+## Requisitos
 
-## Funcionamiento
+- **Java 17** o superior
+- **Gradle 7.0** o superior
+- **Docker** (opcional, para despliegue en contenedor)
 
-Se recibirá como parámetro un array de Strings que representan cada fila de una tabla de (6x6) con la secuencia del ADN. Las letras de los Strings solo pueden ser: (A,T,C,G), las cuales representa cada base nitrogenada del ADN.
+## Tecnologías
 
-Se sabrá si un humano es mutante, si se encuentra **MAS DE UNA SECUENCIA** de cuatro letras iguales, de forma oblicua, horizontal o vertical.
+- **Spring Boot** (Framework principal)
+- **H2 Database** (Base de datos embebida)
+- **Jakarta Validation** (Validación de ADN)
+- **Lombok** (Reducción de código boilerplate)
+- **Render** (Despliegue en nube)
 
-Las filas de la matriz a verificar se ingresan por teclado.
+## Estructura del Proyecto
 
-Ejemplo de input: '**ATCGTA**' (esto equivale a una fila de la matriz)
+- **`controllers`**: Controladores REST para los endpoints.
+- **`services`**: Lógica de negocio y procesamiento de ADN.
+- **`repositories`**: Interacción con la base de datos.
+- **`dto`**: Data Transfer Objects para comunicación.
+- **`validators`**: Validadores para la estructura de ADN.
+- **`entities`**: Entidades JPA para la base de datos.
 
-Una vez cargada correctamente la misma, se aplica una función que verifica si hay presencia en la matriz de mutantes o no y se devuelve el resultado al usuario en base a eso.
+## Instalación
 
-## Ejecución
+1. Descargar el archivo comprimido del proyecto.
+2. Extraer en su equipo.
+3. Abrir con un IDE de Java, como IntelliJ IDEA.
+4. Instalar dependencias si es necesario.
+5. Ejecutar.
+6. En application.properties está el link para acceder a swagger y probar las peticiones a la API, como también está el link para acceder a la base de datos H2 y ver el registro de los ADN.
+  
+## Endpoints
 
-El proyecto ha sido deployado a Render y puede ser accedido mediante el siguiente link:
+### POST /mutant
+**Descripción:** Recibe una secuencia de ADN y determina si es de un mutante.  
+**URL:** `/mutant`  
+**Método:** `POST`
 
-https://parcial-magneto.onrender.com
-
-### Endpoints
-
-- **POST** /mutant - Recibe un JSON con la matriz de ADN a verificar. Ejemplo:
-
-```json
+**Request Body:**
+```
 {
-    "dna": [
-        "ATGCGA",
-        "CAGTGC",
-        "TTATGT",
-        "AGAAGG",
-        "CCCCTA",
-        "TCACTG"
-    ]
+  "dna": ["ATGCGA", "CAGTGC", "TTATGT", "AGAAGG", "CCCCTA", "TCACTG"]
 }
 ```
-- **GET** /stats - Devuelve un JSON con la cantidad de mutantes y humanos verificados. Ejemplo:
+**Responses:**
+- `200 OK` si el ADN es mutante.
+- `403 FORBIDDEN` si el ADN es humano.
 
+### GET /stats
+**Descripción:** Devuelve estadísticas de las verificaciones de ADN.
+**URL:** `/stats`
+**Método:** `GET`
+**Response:**
 ```json
 {
-    "count_mutant_dna": 40,
-    "count_human_dna": 100,
-    "ratio": 0.4
+  "count_mutant_dna": 40,
+  "count_human_dna": 100,
+  "ratio": 0.4
 }
 ```
-
-## Ejemplos de ADN
-
-Ejemplo de matriz **MUTANTE**:
-
-```json
-{
-    "dna": [
-      "ATGCGA",
-      "CAGTGC",
-      "TTATGT",
-      "AGAAAG",
-      "CCCCTA",
-      "TCACTG"
-    ]
-}
-```
-
-Ejemplo de matriz **NO MUTANTE**:
-
-```json
-{
-    "dna": [
-      "ATGGTG",
-      "GTCTTA",
-      "AATTGG",
-      "ACTAGT",
-      "GGATTC", 
-      "AGGCAA"
-    ]
-}
-```
-
-## Pruebas Unitarias
-
-Se incluyen casos de pruebas contemplando todos los patrones posibles (en filas, columnas y diagonales).
